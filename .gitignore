@@ -1,6 +1,6 @@
 # Fichiers de données
-data/raw/
-data/processed/
+data/raw/*.csv
+data/processed/*.db
 models/
 
 # Fichiers de logs
