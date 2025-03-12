@@ -1,3 +1,7 @@
+import os
+from pathlib import Path
+
+import pandas as pd
 import requests
 import zipfile
 import io
@@ -8,6 +12,7 @@ config = load_config()
 
 URL = config['path']['url']
 PATH_CSV = config['path']['extract_csv']
+FILENAME_CSV = config['value']['filename_data']
 
 def download_and_extract_zip():
     # Télécharger le fichier
@@ -20,10 +25,17 @@ def download_and_extract_zip():
 
     print(f"Fichier extrait dans le répertoire : {PATH_CSV}")
 
+def prepare_to_database():
+    path = Path(PATH_CSV) / FILENAME_CSV
+    data = pd.read_csv(path)
+    os.remove(path)
+
+    print(data.head())
 
 def data_processing():
 
     download_and_extract_zip()
+    prepare_to_database()
 
 
 if __name__ == "__main__":
