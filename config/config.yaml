@@ -1,4 +1,4 @@
 path:
   url: "https://github.com/eishkina-estia/ML2023/raw/main/data/New_York_City_Taxi_Trip_Duration.zip"
-  extract_csv: "./row"
-  extract_db: "./data"
+  extract_csv: "./data/row"
+  extract_db: "./data/processed"
