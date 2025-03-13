@@ -47,5 +47,5 @@ def evaluation(model, df_train, df_test):
 
 def serialisation(model):
     print("Enregistrement du model")
-
     joblib.dump(model, os.path.join(config['path']['model'], config['value']['model_name']))
+    print("Enregistrement terminé avec succes.")

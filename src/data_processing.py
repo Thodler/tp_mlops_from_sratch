@@ -1,12 +1,4 @@
-import os
-from pathlib import Path
-
 import pandas as pd
-import requests
-import zipfile
-import io
-
-from sklearn.model_selection import train_test_split
 
 from utils.config_loader import load_config
 from utils.sqlite_service import SQLiteService
@@ -14,32 +6,6 @@ from utils.sqlite_service import SQLiteService
 config = load_config()
 
 my_db = SQLiteService()  # Connection a la BDD
-
-URL = config['path']['url']
-PATH_CSV = config['path']['extract_csv']
-FILENAME_CSV = config['value']['filename_data']
-
-def download_and_extract_zip():
-    # Télécharger le fichier
-    response = requests.get(URL)
-
-    # Extraire le fichier ZIP
-    with zipfile.ZipFile(io.BytesIO(response.content)) as zip_ref:
-        zip_ref.extractall(PATH_CSV)
-
-    print(f"Fichier extrait dans le répertoire : {PATH_CSV}")
-
-def prepare_database():
-    path = Path(PATH_CSV) / FILENAME_CSV
-    df = pd.read_csv(path)
-    os.remove(path)
-
-    X_train, X_test = train_test_split(df, test_size=0.2, random_state=42)
-
-    X_train.to_sql('train', my_db.conn, if_exists='replace', index=False)
-    X_test.to_sql('test', my_db.conn, if_exists='replace', index=False)
-
-    print('Base de donnée crée.')
 
 def clean_data():
     # Requête en BDD
@@ -76,8 +42,6 @@ def preprocessing(df):
 
 
 def data_processing():
-    download_and_extract_zip()
-    prepare_database()
     result = clean_data()
 
     my_db.close()
