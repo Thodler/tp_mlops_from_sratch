@@ -1,8 +1,15 @@
+import os.path
+
+import joblib
 from sklearn.compose import ColumnTransformer
 from sklearn.linear_model import Ridge
 from sklearn.metrics import root_mean_squared_error, r2_score
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
+
+from utils.config_loader import load_config
+
+config = load_config()
 
 num_features = ['abnormal_period', 'hour']
 cat_features = ['weekday', 'month']
@@ -10,6 +17,7 @@ cat_features = ['weekday', 'month']
 train_features = num_features + cat_features
 
 def pipeline_processing(df_train):
+    print("Entrainement du modele")
     X_train, y_train = df_train
 
     column_transformer = ColumnTransformer([
@@ -25,6 +33,7 @@ def pipeline_processing(df_train):
     return pipeline.fit(X_train[train_features], y_train)
 
 def evaluation(model, df_train, df_test):
+    print("Démarrage de l'evalution")
 
     X_train, y_train = df_train
     X_test, y_test = df_test
@@ -35,3 +44,8 @@ def evaluation(model, df_train, df_test):
     print("Train RMSLE = %.4f" % root_mean_squared_error(y_train, y_pred_train))
     print("Test RMSLE = %.4f" % root_mean_squared_error(y_test, y_pred_test))
     print("Test R2 = %.4f" % r2_score(y_test, y_pred_test))
+
+def serialisation(model):
+    print("Enregistrement du model")
+
+    joblib.dump(model, os.path.join(config['path']['model'], config['value']['model_name']))
