@@ -1,21 +1,26 @@
 import sys
 
-from src.data_processing import data_processing
-from src.get_data import get_data
-from src.train_model import pipeline_processing, evaluation, serialisation
+from src.data_repository import data_repository
+from src.download_data import download_data
+from src.models.TaxiModel import TaxiModel
+from src.train_model import pipeline_processing, serialisation
 
 
 def main(create_db = False):
 
     if create_db:
-        get_data()
+        download_data()
 
-    set_train, set_test = data_processing()
+    set_train, set_test = data_repository()
 
-    model = pipeline_processing(set_train)
-    evaluation(model, set_train, set_test)
+    pipeline = pipeline_processing()
 
-    serialisation(model)
+    taxi_model = TaxiModel(pipeline, set_train, set_test)
+
+    taxi_model.fit()
+    taxi_model.evaluation()
+
+    serialisation(taxi_model)
 
 
 if __name__ == "__main__":

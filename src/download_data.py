@@ -46,9 +46,9 @@ def prepare_database():
     my_db.close()
     print('Base de donnée crée.')
 
-def get_data():
+def download_data():
     download_and_extract_zip()
     prepare_database()
 
 if __name__ == "__main__":
-    get_data()
+    download_data()
