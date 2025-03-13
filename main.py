@@ -1,9 +1,12 @@
 from src.data_processing import data_processing
+from src.train_model import pipeline_processing, evaluation
+
 
 def main():
     set_train, set_test = data_processing()
 
-    X_train, y_train = set_train
+    models = pipeline_processing(set_train)
+    evaluation(models, set_train, set_test)
 
 
 if __name__ == "__main__":
