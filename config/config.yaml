@@ -8,3 +8,4 @@ value:
   filename_data: "New_York_City_Taxi_Trip_Duration.csv"
   database_name: "dataset.db"
   model_name: "model.joblib"
+  target: "trip_duration"

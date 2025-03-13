@@ -7,18 +7,14 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 from utils.config_loader import load_config
+from utils.feature import cat_features, num_features
 
 config = load_config()
 
-num_features = ['abnormal_period', 'hour']
-cat_features = ['weekday', 'month']
-
-train_features = num_features + cat_features
-
 def pipeline_processing():
     column_transformer = ColumnTransformer([
-        ('ohe', OneHotEncoder(handle_unknown="ignore"), cat_features),
-        ('scaling', StandardScaler(), num_features)]
+        ('ohe', OneHotEncoder(handle_unknown="ignore"), cat_features()),
+        ('scaling', StandardScaler(), num_features())]
     )
 
     pipeline = Pipeline(steps=[
