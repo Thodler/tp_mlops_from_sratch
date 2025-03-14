@@ -11,13 +11,9 @@ class TaxiModel:
         self.__columnsFeature = column_feature
 
     def __preprocess(self, X):
-        X.drop(columns=[self.__TARGET_NAME])
+        print(X.head())
 
-        X.drop(columns=['id'], inplace=True)
-        X.drop(columns=['dropoff_datetime'], inplace=True)
         X['pickup_datetime'] = pd.to_datetime(X['pickup_datetime'])
-
-
         X['pickup_date'] = X['pickup_datetime'].dt.date
 
         df_abnormal_dates = X.groupby('pickup_date').size()
@@ -28,12 +24,12 @@ class TaxiModel:
         X['hour'] = X['pickup_datetime'].dt.hour
         X['abnormal_period'] = X['pickup_datetime'].dt.date.isin(abnormal_dates.index).astype(int)
 
-        return X
+        return X[self.__columnsFeature]
 
     def __postprocess(self, raw_output):
         # your postprocessing logic: inverse transformation, etc.
-        # example: np.expm1(raw_output)
-        return np.round(raw_output)
+        return np.expm1(np.round(raw_output))
+
 
     def fit(self, X, y, X_test, y_test):
         X = self.__preprocess(X)
